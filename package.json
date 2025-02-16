@@ -16,7 +16,7 @@
     "db:seed": "NODE_PATH=. ts-node -r tsconfig-paths/register test/seed.ts",
     "db:drop": "NODE_ENV=development NODE_PATH=. npm run build && typeorm schema:drop -d dist/database/data-source.database.js",
     "lint": "eslint .",
-    "test": "NODE_PATH=. jest"
+    "test": "NODE_PATH=. NODE_OPTIONS='--require tsconfig-paths/register' jest"
   },
   "dependencies": {
     "@nestjs/apollo": "^13.0.2",
@@ -26,6 +26,8 @@
     "@nestjs/graphql": "^13.0.2",
     "@nestjs/platform-express": "^11.0.6",
     "@nestjs/typeorm": "^11.0.0",
+    "@types/dotenv": "^6.1.1",
+    "dotenv": "^16.4.7",
     "graphql-type-json": "^0.3.2",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
