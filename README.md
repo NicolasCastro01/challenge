@@ -141,33 +141,34 @@ DATABASE_NAME='challenge'
 JWT_SECRET='370378e1fa51e79552b137683a319e9520bd4a3303983e29ff3431f2111176f4'
 ```
 
-4. Rode o seguinte comando para inicializar os serviços do docker compose:
+5. Rode o seguinte comando para inicializar os serviços do docker compose:
    ```bash
    docker compose up -d --build && docker buildx prune -f
    ```
    Esse comando fará as seguintes ações:
    - Irá construir todos os serviços necessários;
    - Limpar o cache de build do docker;
-5. Instale as dependências do projeto:
+6. Instale as dependências do projeto:
    ```bash
    docker exec -it provisioner npm install
    docker exec -it provisioner npm run db:migrate
    docker exec -it provisioner npm run db:seed
    ```
-6. Rode as migrações:
+7. Rode as migrações:
    ```bash
    docker exec -it provisioner npm run db:migrate
    ```
-7. Rode os seeders:
+8. Rode os seeders:
    ```bash
    docker exec -it provisioner npm run db:seed
    ```
-8. Inicie o servidor:
+9. Inicie o servidor:
    ```bash
    docker exec -it provisioner npm run start:dev -- --host 0.0.0.0
    ```
-9. Acesse o **Playground do GraphQL**:
-   - 👉 [http://localhost:3000/graphql](http://localhost:3000/graphql)
+10. Acesse o **Playground do GraphQL**:
+
+- 👉 [http://localhost:3000/graphql](http://localhost:3000/graphql)
 
 ### Migrations
 
