@@ -3,7 +3,7 @@ import { ContentRepository } from '@/content/repository'
 import { ContentRepository as ContentRepositoryProvider } from '@/content/providers/repository'
 import { ContentResolver } from '@/content/resolver'
 import { ContentService } from '@/content/service'
-import { ContentServiceContract } from '@/content/providers/service'
+import { ContentServiceContract as ContentServiceProvider } from '@/content/providers/service'
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { UserModule } from '@/user'
@@ -12,7 +12,7 @@ import { UserModule } from '@/user'
   imports: [TypeOrmModule.forFeature([Content]), UserModule],
   providers: [
     {
-      provide: ContentServiceContract,
+      provide: ContentServiceProvider,
       useClass: ContentService,
     },
     {
