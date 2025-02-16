@@ -19,6 +19,7 @@ export class TextProvisioner implements Provisioner {
 
     this.content.activateDownload()
     this.content.activateEmbed()
+    this.content.setLink()
 
     const metadata: Metadata<'text'> = {
       size: bytes,
