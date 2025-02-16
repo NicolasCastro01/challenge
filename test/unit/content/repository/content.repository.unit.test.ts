@@ -1,12 +1,14 @@
+import { ContentRepository as ContentRepositoryContract } from '@/content/contracts/repository'
+import { Content } from '@/content/entity'
+import { ContentRepository as ContentRepositoryProvider } from '@/content/providers/repository'
 import { Test, TestingModule } from '@nestjs/testing'
 import { suite, test } from '@testdeck/jest'
 import { ContentRepository } from 'src/content/repository'
 import { DataSource } from 'typeorm'
-import { Content } from 'src/content/entity'
 
 @suite
 export class ContentRepositoryUnitTest {
-  private contentRepository: ContentRepository
+  private contentRepository: ContentRepositoryContract
   private dataSource: DataSource
 
   private readonly mockContent: Content = {
@@ -22,7 +24,10 @@ export class ContentRepositoryUnitTest {
   async before() {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        ContentRepository,
+        {
+          provide: ContentRepositoryProvider,
+          useClass: ContentRepository,
+        },
         {
           provide: DataSource,
           useValue: {
