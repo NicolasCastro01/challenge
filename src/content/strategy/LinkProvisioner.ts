@@ -12,7 +12,7 @@ export class LinkProvisioner implements Provisioner {
   public constructor(content: Content<'link'>) {
     this.content = content
     this.type = 'link'
-    this.format = 'pdf'
+    this.format = null
   }
 
   provision(): ProvisionDto {
@@ -23,6 +23,9 @@ export class LinkProvisioner implements Provisioner {
       trusted: LinkHelper.checkTrustByUrl(this.content.getUrl()),
     }
     this.content.setMetadata(metadata)
+    this.content.setFormat(this.format)
+
+    const link = this.handleLink()
 
     return {
       id: this.content.getIdentity(),
@@ -32,12 +35,20 @@ export class LinkProvisioner implements Provisioner {
       description: this.content.getDescription(),
       total_likes: this.content.getTotalLikes(),
       type: this.type,
-      url: this.content.getUrl() || 'http://default.com',
+      url: link,
       allow_download: this.content.getAllowDownload(),
       is_embeddable: this.content.getIsEmbeddable(),
       format: this.content.getFormat(),
       bytes: this.content.getBytes(),
       metadata: this.content.getMetadata(),
     }
+  }
+
+  private handleLink(): string {
+    if (this.content.hasNotProtocol()) return 'http://default.com'
+
+    this.content.setLink()
+
+    return this.content.getUrl()
   }
 }
