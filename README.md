@@ -1,3 +1,9 @@
+<p align="center" margin-top="25px" >
+  <img src="https://img.shields.io/badge/Status-Development-yellow" alt="Status: Development" />
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/nicolascastro01/challenge?color=yellow">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/nicolascastro01/challenge?color=yellow">
+</p>
+
 ## 📈 Análise do código fonte
 
 Antes de dar início no código, foi necessário realizar uma análise do código fonte por completo.
