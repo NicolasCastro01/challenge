@@ -6,11 +6,13 @@ import { VideoHelper } from '@/content/helper/VideoHelper'
 
 export class VideoProvisioner implements Provisioner {
   private readonly type: string
+  private readonly format: string
   private readonly content: Content<'video'>
 
   public constructor(content: Content<'video'>) {
     this.content = content
     this.type = 'video'
+    this.format = VideoHelper.getFormatFromExtension(this.content.getURLRaw())
   }
 
   provision(): ProvisionDto {
@@ -18,8 +20,7 @@ export class VideoProvisioner implements Provisioner {
     this.content.activateEmbed()
 
     const bytes = this.content.getBytes()
-    const format = VideoHelper.getFormatFromExtension(this.content.getUrl())
-    this.content.setFormat(format)
+    this.content.setFormat(this.format)
 
     const metadata: Metadata<'video'> = {
       duration: VideoHelper.getDurationFromBytes(bytes),

@@ -2,7 +2,7 @@ import { type Provisioner } from '@/content/contracts'
 import { Metadata } from '@/content/contracts/metadata'
 import { Content } from '@/content/core'
 import { type ProvisionDto } from '@/content/dto'
-import { ImageHelper } from '@/content/helper/ImageHelper'
+import { ImageHelper } from '@/content/helper'
 
 export class ImageProvisioner implements Provisioner {
   private readonly type: string
@@ -12,7 +12,7 @@ export class ImageProvisioner implements Provisioner {
   public constructor(content: Content<'image'>) {
     this.content = content
     this.type = 'image'
-    this.format = ImageHelper.getFormatFromUrl(this.content.getUrl())
+    this.format = ImageHelper.getFormatFromUrl(this.content.getURLRaw())
   }
 
   provision(): ProvisionDto {
