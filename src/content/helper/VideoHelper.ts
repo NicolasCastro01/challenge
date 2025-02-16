@@ -1,4 +1,4 @@
-import path from 'node:path'
+import * as path from 'node:path'
 
 export class VideoHelper {
   static getFormatFromExtension(extension: string = ''): string {
