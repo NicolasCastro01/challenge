@@ -24,8 +24,7 @@ export class Content<Type extends MetadataTypes> extends Entity<ContentProps<Typ
 
   private constructor(props: ContentProps<Type>, id?: string) {
     super(props, id)
-    this.setLink()
-    this.setBytes()
+    this.refreshPropsByUrl()
   }
 
   public static create<Type extends MetadataTypes>(props: ContentProps<Type>): Content<Type> {
@@ -59,6 +58,10 @@ export class Content<Type extends MetadataTypes> extends Entity<ContentProps<Typ
     return this.getProps().type
   }
 
+  public getURLRaw(): string {
+    return this.removeQueryParamsFromURL()
+  }
+
   public getUrl(): string {
     return this.getProps().url
   }
@@ -85,6 +88,14 @@ export class Content<Type extends MetadataTypes> extends Entity<ContentProps<Typ
 
   public getMetadata(): Metadata<Type> | null {
     return this.getProps().metadata
+  }
+
+  public hasNotProtocol(): boolean {
+    return !this.hasProtocol()
+  }
+
+  public hasProtocol(): boolean {
+    return this.getUrl()?.startsWith('http')
   }
 
   public setMetadata(metadata: Metadata<Type>): void {
@@ -115,8 +126,25 @@ export class Content<Type extends MetadataTypes> extends Entity<ContentProps<Typ
     this.getProps().format = format
   }
 
+  public setUrl(url: string): void {
+    this.getProps().url = url
+    this.refreshPropsByUrl()
+  }
+
   public setLink(): void {
-    this.getProps().url = GeneratorSignedURL.generateByOriginalURL(this.getUrl() || '')
+    this.getProps().url = GeneratorSignedURL.generateByOriginalURL(this.getUrl())
+  }
+
+  private contentIsNotFound(): boolean {
+    return !fs.existsSync(this.getUrl())
+  }
+
+  private getFileSize(): number {
+    return fs.statSync(this.getUrl()).size
+  }
+
+  private refreshPropsByUrl(): void {
+    this.setBytes()
   }
 
   private setBytes(): void {
@@ -133,11 +161,7 @@ export class Content<Type extends MetadataTypes> extends Entity<ContentProps<Typ
     }
   }
 
-  private contentIsNotFound(): boolean {
-    return !fs.existsSync(this.getUrl())
-  }
-
-  private getFileSize(): number {
-    return fs.statSync(this.getUrl()).size
+  private removeQueryParamsFromURL(): string {
+    return this.getProps().url?.split('?')[0]
   }
 }
