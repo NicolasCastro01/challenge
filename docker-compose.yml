@@ -1,14 +1,43 @@
+version: '3.8'
+
 services:
   db:
+    container_name: provisioner-db
     image: postgres:13
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: challenge
+      - POSTGRES_USER=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
     ports:
-      - '5432:5432'
-  
+      - ${DATABASE_PORT}:5432
+
+  provisioner:
+    container_name: provisioner
+    image: node:${APP_NODE_VERSION}
+    restart: always
+    env_file: .env
+    depends_on:
+      - db
+    environment:
+      - APP_PORT=${APP_PORT}
+      - APP_NODE_VERSION=${APP_NODE_VERSION}
+      - REDIS_PORT=${REDIS_PORT}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - JWT_SECRET=${JWT_SECRET}
+    ports:
+      - ${APP_PORT}:3000
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: 'tail -f /dev/null'
+    expose:
+      - ${APP_PORT}
+
   redis:
     image: redis:latest
     ports:
-      - '6379:6379'
+      - ${REDIS_PORT}:6379
