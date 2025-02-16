@@ -112,6 +112,19 @@ export const seedDatabase = async (dataSource: DataSource) => {
         company: createdCompany1,
       }),
     ),
+    queryRunner.manager.save(
+      queryRunner.manager.create(Content, {
+        id: 'a3f8d5e6-4c2b-47d1-8e9a-1f0c23bfa5d3',
+        title: 'A inteligência artificial e o futuro do trabalho com a sua otimização',
+        description:
+          'Acesse este link se quer aprender mais sobre o futuro da programação com a inteligência artificial.',
+        url: 'http://localhost:3000/uploads/text-uol.txt',
+        cover: null,
+        type: 'text',
+        total_likes: 10000,
+        company: createdCompany1,
+      }),
+    ),
   ])
 
   console.info('Database seeded successfully.')
