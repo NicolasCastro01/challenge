@@ -3,10 +3,11 @@ import { suite, test } from '@testdeck/jest'
 import { ContentResolver } from 'src/content/resolver'
 import { ContentService } from 'src/content/service'
 import { ProvisionDto } from 'src/content/dto'
-import { ExecutionContext, Logger } from '@nestjs/common'
+import { Logger, UnprocessableEntityException } from '@nestjs/common'
 import { GqlExecutionContext } from '@nestjs/graphql'
 import { AuthService } from 'src/user/service'
 import { UserRepository } from 'src/user/repository'
+import { ContentServiceContract as ContentServiceProvider } from '@/content/providers/service'
 
 @suite
 export class ContentResolverUnitTest {
@@ -39,7 +40,7 @@ export class ContentResolverUnitTest {
           },
         },
         {
-          provide: ContentService,
+          provide: ContentServiceProvider,
           useValue: {
             provision: jest.fn(),
           },
@@ -48,18 +49,7 @@ export class ContentResolverUnitTest {
     }).compile()
 
     this.contentResolver = module.get<ContentResolver>(ContentResolver)
-    this.contentService = module.get<ContentService>(ContentService)
-  }
-
-  private createMockContext(): ExecutionContext {
-    return {
-      switchToHttp: jest.fn(),
-      switchToRpc: jest.fn(),
-      switchToWs: jest.fn(),
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
-      getType: jest.fn(),
-    } as unknown as ExecutionContext
+    this.contentService = module.get<ContentService>(ContentServiceProvider)
   }
 
   private createGqlExecutionContext(userId?: string): GqlExecutionContext {
@@ -107,6 +97,22 @@ export class ContentResolverUnitTest {
     expect(loggerSpy).toHaveBeenCalledWith(
       `Provisioning content=4372ebd1-2ee8-4501-9ed5-549df46d0eb0 to user=valid-user-id`,
     )
+  }
+
+  @test
+  async '[provision] Should throw unprocessable entity exception if no content id'() {
+    const loggerSpy = jest.spyOn(Logger.prototype, 'log')
+
+    const gqlContext = this.createGqlExecutionContext('valid-user-id')
+    jest.spyOn(GqlExecutionContext, 'create').mockReturnValue(gqlContext)
+
+    try {
+      await this.contentResolver.provision('', gqlContext.getContext().req)
+      expect(loggerSpy).toHaveBeenCalledWith('Content ID is required')
+    } catch (error) {
+      expect(error).toBeInstanceOf(UnprocessableEntityException)
+      expect(error.message).toBe('Content ID is invalid')
+    }
   }
 
   @test
