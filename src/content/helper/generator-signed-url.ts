@@ -9,6 +9,6 @@ export class GeneratorSignedURL {
   }
 
   private static generateSignature() {
-    return Math.random().toString(36).substring(7)
+    return Math.random().toString(36).substring(2, 9)
   }
 }
