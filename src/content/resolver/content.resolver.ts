@@ -18,8 +18,8 @@ export class ContentResolver {
   @Query(() => ProvisionDto)
   provision(@Args('content_id') contentId: string, @Context('req') req): Promise<ProvisionDto> {
     if (!contentId) {
-      this.logger.error(`Invalid Content ID: ${contentId}`)
-      throw new UnprocessableEntityException(`Content ID is invalid: ${contentId}`)
+      this.logger.error('Content ID is required')
+      throw new UnprocessableEntityException('Content ID is invalid')
     }
 
     this.logger.log(`Provisioning content=${contentId} to user=${req.user.id}`)
