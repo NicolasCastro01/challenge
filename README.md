@@ -34,6 +34,7 @@ Utilize as seguintes credenciais para facilitar a instalação:
 # Application
 APP_PORT=3000
 APP_NODE_VERSION='22.13.1'
+TOKEN_VALID='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMThjMzdjZTItY2QzNC00MzA1LTljYTQtYzE1ZmM3MzZiZWFjIn0.pqWRiyQuvWRVQgIzKvQ85RrBwSF5KxeGZrkFvKt2CG8'
 
 # Redis
 REDIS_PORT=6379
@@ -101,7 +102,7 @@ mingw32-make install
    make help
 ```
 
-### Tests
+### Tests com o Makefile
 
 Para rodar os testes:
 
@@ -126,6 +127,7 @@ make test
 # Application
 APP_PORT=3000
 APP_NODE_VERSION='22.13.1'
+TOKEN_VALID='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMThjMzdjZTItY2QzNC00MzA1LTljYTQtYzE1ZmM3MzZiZWFjIn0.pqWRiyQuvWRVQgIzKvQ85RrBwSF5KxeGZrkFvKt2CG8'
 
 # Redis
 REDIS_PORT=6379
@@ -170,12 +172,20 @@ JWT_SECRET='370378e1fa51e79552b137683a319e9520bd4a3303983e29ff3431f2111176f4'
 
 - 👉 [http://localhost:3000/graphql](http://localhost:3000/graphql)
 
+### Tests sem o Makefile
+
+Para rodar os testes:
+
+```bash
+docker exec -it provisioner npm run test
+```
+
 ### Migrations
 
 Caso precise criar novas migrations, utilize o comando:
 
 ```bash
-npm run db:create_migration --name=create-xpto-table
+docker exec -it provisioner npm run db:create_migration --name=create-xpto-table
 ```
 
 ## Documentação da API
