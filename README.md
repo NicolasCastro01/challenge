@@ -78,14 +78,35 @@ mingw32-make install
    ```bash
    cd challenge
    ```
-4. Rode o seguinte comando para inicializar os serviços do docker compose:
+4. Crie o arquivo **.env** e cole as seguintes variáveis:
+
+```env
+# Application
+APP_PORT=3000
+APP_NODE_VERSION='22.13.1'
+TOKEN_VALID='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMThjMzdjZTItY2QzNC00MzA1LTljYTQtYzE1ZmM3MzZiZWFjIn0.pqWRiyQuvWRVQgIzKvQ85RrBwSF5KxeGZrkFvKt2CG8'
+
+# Redis
+REDIS_PORT=6379
+
+# Database
+DATABASE_HOST='provisioner-db'
+DATABASE_PORT=5432
+DATABASE_USERNAME='postgres'
+DATABASE_PASSWORD='postgres'
+DATABASE_NAME='challenge'
+
+# Authorization
+JWT_SECRET='370378e1fa51e79552b137683a319e9520bd4a3303983e29ff3431f2111176f4'
+```
+5. Rode o seguinte comando para inicializar os serviços do docker compose:
    ```bash
    make build
    ```
    Esse comando fará as seguintes ações:
    - Irá construir todos os serviços necessários;
    - Limpar o cache de build do docker;
-5. Instale as dependências do projeto:
+6. Instale as dependências do projeto:
    ```bash
    make install
    ```
@@ -93,11 +114,11 @@ mingw32-make install
    - Irá instalar todas as dependências do projeto;
    - Rodará as migrations;
    - Rodará os seeders;
-6. Inicie o servidor:
+7. Inicie o servidor:
    ```bash
    make run
    ```
-7. Acesse o **Playground do GraphQL**:
+8. Acesse o **Playground do GraphQL**:
    - 👉 [http://localhost:3000/graphql](http://localhost:3000/graphql)
 
 ### Sobre os comandos Make
