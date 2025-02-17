@@ -1,26 +1,35 @@
-import { HttpStatus, Module } from '@nestjs/common'
-import { GraphQLError } from 'graphql'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { GraphQLModule } from '@nestjs/graphql'
-import { ContentModule } from 'src/content'
-import { UserModule } from 'src/user'
-import { CompanyModule } from 'src/company'
 import { ApolloDriver } from '@nestjs/apollo'
-import { ConfigModule } from '@nestjs/config'
+import { CompanyModule } from '@/company'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ContentModule } from '@/content'
+import { GraphQLError } from 'graphql'
+import { GraphQLModule } from '@nestjs/graphql'
+import { HttpStatus, Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { UserModule } from '@/user'
+import AppConfig from '@/config/app.config'
+import DatabaseConfig from '@/config/database.config'
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'challenge',
-      autoLoadEntities: true,
-      synchronize: false,
+    ConfigModule.forRoot({
+      load: [AppConfig, DatabaseConfig],
+      isGlobal: true,
     }),
-    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        type: 'postgres',
+        host: config.get<string>('database.host'),
+        port: config.get<number>('database.port'),
+        username: config.get<string>('database.username'),
+        password: config.get<string>('database.password'),
+        database: config.get<string>('database.database'),
+        autoLoadEntities: config.get<boolean>('database.auto_load_entities'),
+        synchronize: config.get<boolean>('database.synchronize'),
+      }),
+      inject: [ConfigService],
+    }),
     GraphQLModule.forRoot({
       autoSchemaFile: true,
       driver: ApolloDriver,

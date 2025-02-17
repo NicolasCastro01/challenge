@@ -32,4 +32,7 @@ module.exports = {
       statements: 80,
     },
   },
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 }
