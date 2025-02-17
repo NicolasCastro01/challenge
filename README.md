@@ -159,8 +159,6 @@ JWT_SECRET='370378e1fa51e79552b137683a319e9520bd4a3303983e29ff3431f2111176f4'
 6. Instale as dependências do projeto:
    ```bash
    docker exec -it provisioner npm install
-   docker exec -it provisioner npm run db:migrate
-   docker exec -it provisioner npm run db:seed
    ```
 7. Rode as migrações:
    ```bash
